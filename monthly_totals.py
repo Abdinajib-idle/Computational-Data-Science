@@ -12,13 +12,21 @@ def date_to_month(d):
 
 
 def pivot_months_pandas(data):
+
     """
     Create monthly precipitation totals for each station in the data set.
 
     This should use Pandas methods to manipulate the data.
     """
-    # ...
+    data['month'] = data['date'].apply(date_to_month)
+    monthly = data.groupby(['month', 'name']).aggregate('sum').reset_index()
+    monthly = monthly.pivot(index='name', columns='month', values='precipitation')
+
+    counts = data.groupby(['month', 'name']).count().reset_index()
+    counts = counts.pivot(index='name', columns='month', values='precipitation')
+
     return monthly, counts
+
 
 
 def pivot_months_loops(data):
